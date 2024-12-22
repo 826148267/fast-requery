@@ -51,19 +51,7 @@
 ## 开发
 
 ### 项目结构
-
-url-params-manager/
-├── manifest.json # 扩展配置文件
-├── popup.html # 弹出窗口 HTML
-├── css/
-│ └── popup.css # 样式文件
-├── js/
-│ └── popup.js # 主要逻辑代码
-└── images/ # 图标文件
-├── icon16.png
-├── icon48.png
-└── icon128.png
-
+<img width="255" alt="image" src="https://github.com/user-attachments/assets/f7c31041-942b-4caf-bd00-6d519ca0179f" />
 
 ### 本地开发
 
