@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>URL参数管理器</title>
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>URL参数管理器</h1>
+    </div>
+    
+    <div class="url-display">
+      <div class="url-text" id="currentUrl"></div>
+    </div>
+
+    <div class="params-container" id="paramsContainer">
+      <!-- 参数列表将通过JavaScript动态生成 -->
+    </div>
+
+    <div class="buttons">
+      <button id="addParam" class="btn">添加参数</button>
+      <button id="savePreset" class="btn">保存预设</button>
+      <button id="applyChanges" class="btn primary">应用修改</button>
+    </div>
+
+    <div class="presets">
+      <h2>已保存的预设</h2>
+      <div id="presetsList">
+        <!-- 预设列表将通过JavaScript动态生成 -->
+      </div>
+    </div>
+  </div>
+  <script src="js/popup.js"></script>
+</body>
+</html>
