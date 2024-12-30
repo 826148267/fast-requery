@@ -75,7 +75,7 @@ bash git clone https://github.com/826148267/url-params-manager.git
 
 ## 作者
 
-zeavango
+zeavan
 
 ## 联系方式
 
