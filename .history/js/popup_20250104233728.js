@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   // 显示当前URL
   document.getElementById('currentUrl').textContent = url.href;
   
-  // 直接使用 params 渲染参数列表
+  // 初始化参数列表
+  const paramsContainer = document.getElementById('paramsContainer');
   const params = new URLSearchParams(url.search);
+  
+  // 渲染参数列表
   for (const [key, value] of params) {
     addParamRow(key, value);
   }
@@ -19,8 +22,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   
   // 应用修改按钮事件
   document.getElementById('applyChanges').addEventListener('click', async function() {
-    // 直接使用预览框中的URL
-    const newUrl = document.getElementById('currentUrl').textContent;
+    const newUrl = await buildUrlFromParams();
     await chrome.tabs.update(tab.id, { url: newUrl });
     window.close();
   });

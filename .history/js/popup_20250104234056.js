@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded', async function() {
   // 显示当前URL
   document.getElementById('currentUrl').textContent = url.href;
   
-  // 直接使用 params 渲染参数列表
+  // 初始化参数列表
+  const paramsContainer = document.getElementById('paramsContainer');
   const params = new URLSearchParams(url.search);
+  
+  // 渲染参数列表
   for (const [key, value] of params) {
     addParamRow(key, value);
   }
