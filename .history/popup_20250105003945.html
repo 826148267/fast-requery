@@ -8,10 +8,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1 data-i18n="title">URL Parameters Manager</h1>
-      <button id="toggleLang" class="btn lang-btn">
-        <span data-i18n="currentLang">EN</span>
-      </button>
+      <h1>URL参数管理器</h1>
     </div>
     
     <div class="url-display">
@@ -23,19 +20,18 @@
     </div>
 
     <div class="buttons">
-      <button id="addParam" class="btn" data-i18n="addParam">Add Parameter</button>
-      <button id="savePreset" class="btn" data-i18n="savePreset">Save Preset</button>
-      <button id="applyChanges" class="btn primary" data-i18n="applyChanges">Apply Changes</button>
+      <button id="addParam" class="btn">添加参数</button>
+      <button id="savePreset" class="btn">保存预设</button>
+      <button id="applyChanges" class="btn primary">应用修改</button>
     </div>
 
     <div class="presets">
-      <h2 data-i18n="presetsTitle">Saved Presets</h2>
+      <h2>已保存的预设</h2>
       <div id="presetsList">
         <!-- 预设列表将通过JavaScript动态生成 -->
       </div>
     </div>
   </div>
-  <script src="js/i18n.js"></script>
   <script src="js/popup.js"></script>
 </body>
 </html>
