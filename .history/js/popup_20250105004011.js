@@ -229,6 +229,7 @@ async function applyPreset(name) {
 async function deletePreset(name) {
   try {
     if (!confirm(window.i18n.t('confirmDelete').replace('{name}', name))) return;
+    if (!confirm(`确定要删除预设"${name}"吗？`)) return;
     
     const { presets = {} } = await chrome.storage.local.get('presets');
     delete presets[name];
@@ -237,7 +238,7 @@ async function deletePreset(name) {
     // 重新加载预设列表
     await loadPresets();
   } catch (error) {
-    console.error(window.i18n.t('errorDeletingPreset'), error);
+    console.error('删除预设时出错:', error);
   }
 }
 
