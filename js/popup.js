@@ -60,10 +60,10 @@ function addParamRow(key, value) {
   // 创建删除按钮
   const deleteBtn = document.createElement('button');
   deleteBtn.className = 'btn';
+  deleteBtn.setAttribute('data-i18n', 'delete');
   deleteBtn.textContent = window.i18n.t('delete');
   deleteBtn.addEventListener('click', function() {
     row.remove();
-    // 删除参数后也更新预览
     updateUrlPreview();
   });
   
@@ -83,8 +83,8 @@ async function buildUrlFromParams() {
     }
 
     const url = new URL(tab.url);
-    // 保留原有的URL参数
-    const params = new URLSearchParams(url.search);
+    // 创建新的 URLSearchParams，而不是保留原有的
+    const params = new URLSearchParams();
     
     // 获取所有参数输入框
     const rows = document.querySelectorAll('.param-item');
@@ -101,12 +101,7 @@ async function buildUrlFromParams() {
       const value = valueInput.value.trim();
       
       if (key) {
-        // 如果原URL中存在该参数，则覆盖；否则追加
-        if (params.has(key)) {
-          params.set(key, value);  // 覆盖已存在的参数
-        } else {
-          params.append(key, value);  // 追加新参数
-        }
+        params.append(key, value);  // 只添加当前存在的参数
       }
     });
     
@@ -160,7 +155,8 @@ async function loadPresets() {
     // 创建应用按钮
     const applyBtn = document.createElement('button');
     applyBtn.className = 'btn';
-    applyBtn.textContent = '应用';
+    applyBtn.setAttribute('data-i18n', 'apply');
+    applyBtn.textContent = window.i18n.t('apply');
     applyBtn.addEventListener('click', function() {
       applyPreset(name);
     });
@@ -168,7 +164,8 @@ async function loadPresets() {
     // 创建删除按钮
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'btn';
-    deleteBtn.textContent = '删除';
+    deleteBtn.setAttribute('data-i18n', 'delete');
+    deleteBtn.textContent = window.i18n.t('delete');
     deleteBtn.addEventListener('click', function() {
       deletePreset(name);
     });
@@ -249,4 +246,16 @@ async function updateUrlPreview() {
   } catch (error) {
     console.error('更新URL预览时出错:', error);
   }
+}
+
+// 在文件末尾添加导出
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    addParamRow,
+    buildUrlFromParams,
+    saveCurrentAsPreset,
+    loadPresets,
+    deletePreset,
+    updateUrlPreview
+  };
 } 

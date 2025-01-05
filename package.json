@@ -1,0 +1,17 @@
+{
+  "name": "url-params-manager",
+  "version": "1.0.1",
+  "description": "Chrome extension for managing URL parameters",
+  "main": "popup.js",
+  "scripts": {
+    "test": "jest --config .jest.config.js",
+    "test:watch": "jest --config .jest.config.js --watch"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+} 
