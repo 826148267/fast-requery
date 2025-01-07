@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "URL参数管理器",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "快速修改和管理URL参数的Chrome扩展",
   "permissions": [
     "activeTab",
