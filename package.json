@@ -5,7 +5,8 @@
   "main": "popup.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --config .jest.config.js --watch"
+    "test:watch": "jest --config .jest.config.js --watch",
+    "build": "chmod +x ./scripts/build.sh && ./scripts/build.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
