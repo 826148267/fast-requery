@@ -78,13 +78,18 @@ function addParamRow(key, value) {
 async function buildUrlFromParams() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (!tab) {
-      throw new Error('无法获取当前标签页');
+    if (!tab || !tab.url) {
+      throw new Error('无法获取当前标签页或URL');
     }
 
     const url = new URL(tab.url);
-    // 创建新的 URLSearchParams，而不是保留原有的
-    const params = new URLSearchParams();
+    // 移除末尾斜杠并保留完整的查询字符串
+    let baseUrl = (url.origin + url.pathname).replace(/\/$/, '');
+    if (url.search) {
+      baseUrl += url.search;
+    }
+    
+    const paramPairs = [];
     
     // 获取所有参数输入框
     const rows = document.querySelectorAll('.param-item');
@@ -101,13 +106,17 @@ async function buildUrlFromParams() {
       const value = valueInput.value.trim();
       
       if (key) {
-        params.append(key, value);  // 只添加当前存在的参数
+        // 使用encodeURIComponent确保所有特殊字符都被正确编码
+        const encodedValue = encodeURIComponent(value)
+          .replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+        // 不对key进行编码
+        paramPairs.push(`${key}=${encodedValue}`);
       }
     });
     
-    // 将参数字符串设置到URL中
-    url.search = params.toString();
-    return url.href;
+    // 如果原始URL已经包含查询参数，使用 & 作为分隔符，否则使用 ?
+    const separator = baseUrl.includes('?') ? '&' : '?';
+    return paramPairs.length > 0 ? `${baseUrl}${separator}${paramPairs.join('&')}` : baseUrl;
   } catch (error) {
     console.error('构建URL时出错:', error);
     throw error;

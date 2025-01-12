@@ -63,7 +63,7 @@ describe('URL Parameters Manager', () => {
       
       // 模拟当前标签页
       chrome.tabs.query.mockResolvedValue([{
-        url: 'https://example.com/page?old=param'
+        url: 'https://example.com/page'
       }]);
 
       // 添加一些参数
