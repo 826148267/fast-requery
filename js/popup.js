@@ -88,20 +88,7 @@ async function buildUrlFromParams() {
     
     // 使用Map存储参数，值是数组以支持多个相同key
     const paramMap = new Map();
-    const newParamKeys = new Set();
     const paramOrder = [];
-    
-    // 先获取原始URL中的参数，并保持其原始形式
-    const searchParams = url.search.substring(1).split('&').filter(Boolean);
-    for (const param of searchParams) {
-      const [key, value] = param.split('=');
-      if (key) {
-        paramMap.set(key, value === undefined ? '' : value);
-        if (!paramOrder.includes(key)) {
-          paramOrder.push(key);
-        }
-      }
-    }
     
     // 获取所有参数输入框中的参数
     const rows = document.querySelectorAll('.param-item');
@@ -128,11 +115,10 @@ async function buildUrlFromParams() {
         }
         
         paramMap.set(key, encodedValue);
-        newParamKeys.add(key);
       }
     });
     
-    // 按原始顺序构建参数字符串
+    // 按顺序构建参数字符串
     const paramPairs = paramOrder.map(key => {
       const value = paramMap.get(key);
       return value === '' ? key : `${key}=${value}`;

@@ -181,6 +181,8 @@ describe('buildUrlFromParams', () => {
       }])
     );
     
+    createParamRow('format', 'json');
+    createParamRow('test', 'true');
     createParamRow('http://10.192.12.1:8080', '');
     createParamRow('key', '搜索关键词');
     createParamRow('debug', 'yes');
@@ -228,5 +230,40 @@ describe('buildUrlFromParams', () => {
     );
     
     await expect(buildUrlFromParams()).rejects.toThrow('无法获取当前标签页或URL');
+  });
+
+  test('应该正确处理删除参数的情况', async () => {
+    global.chrome.tabs.query.mockImplementation(() => 
+      Promise.resolve([{
+        id: 1,
+        url: 'https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=zh-cn&debug=1&area_id=1%2C1%2C1%2C1&user_pin=826132683'
+      }])
+    );
+    
+    // 只创建部分参数，模拟删除了 hl 参数
+    createParamRow('user', 'Dd7eS-UAAAAJ');
+    createParamRow('debug', '1');
+    createParamRow('area_id', '1,1,1,1');
+    createParamRow('user_pin', '826132683');
+    
+    const result = await buildUrlFromParams();
+    expect(result).toBe('https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&debug=1&area_id=1%2C1%2C1%2C1&user_pin=826132683');
+  });
+
+  test('应该替换已存在的参数而不是重复添加', async () => {
+    // 设置一个包含已有参数的URL
+    global.chrome.tabs.query.mockImplementation(() => 
+      Promise.resolve([{
+        id: 1,
+        url: 'https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=en'
+      }])
+    );
+    
+    createParamRow('user', 'Dd7eS-UAAAAJ');
+    createParamRow('hl', 'zh-cn');
+    createParamRow('debug', '1');
+    
+    const result = await buildUrlFromParams();
+    expect(result).toBe('https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=zh-cn&debug=1');
   });
 });
