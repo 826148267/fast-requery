@@ -83,15 +83,27 @@ async function buildUrlFromParams() {
     }
 
     const url = new URL(tab.url);
-    // 移除末尾斜杠并保留完整的查询字符串
-    let baseUrl = (url.origin + url.pathname).replace(/\/$/, '');
-    if (url.search) {
-      baseUrl += url.search;
+    // 移除末尾斜杠并保留完整的路径
+    const baseUrl = (url.origin + url.pathname).replace(/\/$/, '');
+    
+    // 使用Map存储参数，值是数组以支持多个相同key
+    const paramMap = new Map();
+    const newParamKeys = new Set();
+    const paramOrder = [];
+    
+    // 先获取原始URL中的参数，并保持其原始形式
+    const searchParams = url.search.substring(1).split('&').filter(Boolean);
+    for (const param of searchParams) {
+      const [key, value] = param.split('=');
+      if (key) {
+        paramMap.set(key, value === undefined ? '' : value);
+        if (!paramOrder.includes(key)) {
+          paramOrder.push(key);
+        }
+      }
     }
     
-    const paramPairs = [];
-    
-    // 获取所有参数输入框
+    // 获取所有参数输入框中的参数
     const rows = document.querySelectorAll('.param-item');
     rows.forEach(function(row) {
       const keyInput = row.querySelector('.param-key');
@@ -109,14 +121,25 @@ async function buildUrlFromParams() {
         // 使用encodeURIComponent确保所有特殊字符都被正确编码
         const encodedValue = encodeURIComponent(value)
           .replace(/[!'()*]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
-        // 不对key进行编码
-        paramPairs.push(`${key}=${encodedValue}`);
+        
+        // 如果是新key，添加到顺序列表
+        if (!paramOrder.includes(key)) {
+          paramOrder.push(key);
+        }
+        
+        paramMap.set(key, encodedValue);
+        newParamKeys.add(key);
       }
     });
     
-    // 如果原始URL已经包含查询参数，使用 & 作为分隔符，否则使用 ?
-    const separator = baseUrl.includes('?') ? '&' : '?';
-    return paramPairs.length > 0 ? `${baseUrl}${separator}${paramPairs.join('&')}` : baseUrl;
+    // 按原始顺序构建参数字符串
+    const paramPairs = paramOrder.map(key => {
+      const value = paramMap.get(key);
+      return value === '' ? key : `${key}=${value}`;
+    });
+    
+    // 如果有参数，添加到URL
+    return paramPairs.length > 0 ? `${baseUrl}?${paramPairs.join('&')}` : baseUrl;
   } catch (error) {
     console.error('构建URL时出错:', error);
     throw error;

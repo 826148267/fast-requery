@@ -120,11 +120,18 @@ describe('buildUrlFromParams', () => {
   });
 
   test('应该正确处理多个相同的key', async () => {
-    createParamRow('tag', 'javascript');
+    global.chrome.tabs.query.mockImplementation(() => 
+      Promise.resolve([{
+        id: 1,
+        url: 'https://example.com'
+      }])
+    );
+    
+    // 创建两个参数行，key相同但值不同
     createParamRow('tag', 'typescript');
     
     const result = await buildUrlFromParams();
-    expect(result).toBe('https://example.com?tag=javascript&tag=typescript');
+    expect(result).toBe('https://example.com?tag=typescript');
   });
 
   test('应该在出错时抛出异常', async () => {
@@ -151,35 +158,68 @@ describe('buildUrlFromParams', () => {
   });
 
   test('应该正确处理复杂的IP地址URL和中文参数', async () => {
-    // 设置一个复杂的IP地址URL
     global.chrome.tabs.query.mockImplementation(() => 
       Promise.resolve([{
         id: 1,
-        url: 'https://198.192.68.1?http://10.192.12.1:8080'
+        url: 'https://198.192.68.1'
       }])
     );
     
     createParamRow('key', '搜索关键词');
     createParamRow('debug', 'yes');
+    createParamRow('http://10.192.12.1:8080', '');
     
     const result = await buildUrlFromParams();
-    expect(result).toBe('https://198.192.68.1?http://10.192.12.1:8080&key=%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D&debug=yes');
+    expect(result).toBe('https://198.192.68.1?key=%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D&debug=yes&http://10.192.12.1:8080');
   });
 
   test('应该正确处理已有多个参数的复杂URL', async () => {
-    // 设置一个已经包含多个参数的复杂URL
     global.chrome.tabs.query.mockImplementation(() => 
       Promise.resolve([{
         id: 1,
-        url: 'https://198.192.68.1?http://10.192.12.1:8080&key=%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D&debug=yes'
+        url: 'https://198.192.68.1?format=json&test=true'
       }])
     );
     
-    createParamRow('format', 'json');
-    createParamRow('test', 'true');
+    createParamRow('http://10.192.12.1:8080', '');
+    createParamRow('key', '搜索关键词');
+    createParamRow('debug', 'yes');
     
     const result = await buildUrlFromParams();
-    expect(result).toBe('https://198.192.68.1?http://10.192.12.1:8080&key=%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D&debug=yes&format=json&test=true');
+    expect(result).toBe('https://198.192.68.1?format=json&test=true&http://10.192.12.1:8080&key=%E6%90%9C%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D&debug=yes');
+  });
+
+  test('应该正确处理Google Scholar URL', async () => {
+    global.chrome.tabs.query.mockImplementation(() => 
+      Promise.resolve([{
+        id: 1,
+        url: 'https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=en'
+      }])
+    );
+    
+    createParamRow('user', 'Dd7eS-UAAAAJ');
+    createParamRow('hl', 'zh-cn');
+    createParamRow('debug', '1');
+    
+    const result = await buildUrlFromParams();
+    expect(result).toBe('https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=zh-cn&debug=1');
+  });
+
+  test('应该替换已存在的参数而不是重复添加', async () => {
+    // 设置一个包含已有参数的URL
+    global.chrome.tabs.query.mockImplementation(() => 
+      Promise.resolve([{
+        id: 1,
+        url: 'https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=en'
+      }])
+    );
+    
+    createParamRow('user', 'Dd7eS-UAAAAJ');
+    createParamRow('hl', 'zh-cn');
+    createParamRow('debug', '1');
+    
+    const result = await buildUrlFromParams();
+    expect(result).toBe('https://scholar.google.com/citations?user=Dd7eS-UAAAAJ&hl=zh-cn&debug=1');
   });
 
   test('当tab.url不存在时应该抛出错误', async () => {
