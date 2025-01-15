@@ -1,21 +1,22 @@
 {
   "name": "fast-requery",
-  "version": ".1.3",
+  "version": "1.1.3",
   "description": "Chrome extension for URL parameter management",
   "main": "src/popup.js",
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:watch": "jest --config .jest.config.js --watch",
+    "test": "npx jest",
+    "test:coverage": "npx jest --coverage",
+    "test:watch": "npx jest --config .jest.config.js --watch",
     "build": "bash scripts/build.sh",
-    "build:clean": "rimraf dist build && npm run build",
+    "build:clean": "npx rimraf dist build && npm run build",
     "build:prod": "NODE_ENV=production npm run build:clean",
     "dev": "webpack --config webpack.config.js --watch",
     "validate": "node scripts/validate-build.js",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
-    "clean": "rimraf dist",
-    "release": "bash scripts/release.sh"
+    "clean": "npx rimraf dist",
+    "release": "bash scripts/release.sh",
+    "cleanup": "bash scripts/cleanup.sh"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
