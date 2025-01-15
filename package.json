@@ -12,8 +12,8 @@
     "build:prod": "NODE_ENV=production npm run build:clean",
     "dev": "webpack --config webpack.config.js --watch",
     "validate": "node scripts/validate-build.js",
-    "lint": "eslint . --ext .js",
-    "lint:fix": "eslint . --ext .js --fix",
+    "lint": "npx eslint . --ext .js",
+    "lint:fix": "npx eslint . --ext .js --fix",
     "clean": "npx rimraf dist",
     "release": "bash scripts/release.sh",
     "cleanup": "bash scripts/cleanup.sh"
