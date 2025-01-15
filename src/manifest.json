@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "URL Parameters Manager",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "A Chrome extension for managing URL parameters",
   "permissions": [
     "activeTab",
@@ -17,6 +17,17 @@
   },
   "default_locale": "en",
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  }
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popup.js",
+        "i18n.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
 }
