@@ -1,0 +1,71 @@
+.param-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.param-item input[type="checkbox"] {
+  margin: 0;
+}
+
+.param-item input[type="text"] {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.param-item button {
+  padding: 4px 8px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.preset-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.preset-item button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.preset-item .apply-preset {
+  background-color: #28a745;
+  color: white;
+}
+
+.preset-item .delete-preset {
+  background-color: #dc3545;
+  color: white;
+}
+
+#save-preset {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+#preset-name {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#save-preset-btn {
+  padding: 4px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+} 
